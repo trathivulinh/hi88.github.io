@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  
+  <!-- TIÊU ĐỀ HIỂN THỊ TRÊN TRÌNH DUYỆT -->
+  <title>WORLD CUP 2026 - TRỰC TIẾP BÓNG ĐÁ TỐC ĐỘ CAO</title>
+  <meta name="description" content="Xem trực tiếp World Cup 2026 full HD, link mượt không quảng cáo gián đoạn. Cập nhật link liên tục 24/7." />
+  
+  <!-- CẤU HÌNH THẺ OPEN GRAPH (OG) - HIỂN THỊ ẢNH & TIÊU ĐỀ KHI CHIA SẺ QUA ZALO, MESSENGER, TELEGRAM -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://to14.site/" />
+  <meta property="og:title" content="⚽ TRỰC TIẾP WORLD CUP 2026 - LINK SIÊU MƯỢT KHÔNG GIẬT LAG" />
+  <meta property="og:description" content="Bấm vào xem ngay! Link xem bóng đá trực tuyến tốc độ cao, bình luận tiếng Việt, hình ảnh Full HD sắc nét." />
+  <meta property="og:image" content="https://khuyenmai.pages.dev/favicon.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- CẤU HÌNH CHO TWITTER / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="⚽ TRỰC TIẾP WORLD CUP 2026 - LINK SIÊU MƯỢT" />
+  <meta name="twitter:description" content="Link xem bóng đá trực tuyến tốc độ cao, Full HD sắc nét." />
+  <meta name="twitter:image" content="https://khuyenmai.pages.dev/favicon.png" />
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://khuyenmai.pages.dev/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://khuyenmai.pages.dev/favicon.png">
+
+  <!-- Thư viện Hls.js giúp chạy mượt mà luồng stream .m3u8 trên tất cả các trình duyệt -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+  <style>
+    :root {
+      --app-max-width: 475px;
+      --ios-bg: rgba(255, 255, 255, 0.88); 
+      --ios-body-bg: #F4F4F9; 
+      --ios-text-main: #1C1C1E;
+      --ios-text-sub: #8E8E93;
+      --ios-primary: #24693D; 
+      --ios-accent: #34C759;
+      --ios-radius-card: 24px; 
+      --ios-shadow-sm: 0 10px 30px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.01);
+      --ios-shadow-md: 0 20px 45px rgba(36, 105, 61, 0.08);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #DBDBE0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      overflow-x: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      color: var(--ios-text-main);
+    }
+
+    /* --- MÀN HÌNH LOADING KHI VÀO TRANG --- */
+    .app-preloader {
+      position: fixed;
+      inset: 0;
+      background: var(--ios-body-bg);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+    }
+    
+    .app-preloader.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .preloader-ball {
+      font-size: 44px;
+      animation: bounceRotate 1.2s infinite ease-in-out;
+      filter: drop-shadow(0 8px 15px rgba(36, 105, 61, 0.3));
+    }
+
+    .preloader-text {
+      margin-top: 18px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ios-primary);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.8;
+      animation: pulseText 1.5s infinite ease-in-out;
+    }
+
+    @keyframes bounceRotate {
+      0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+      50% { transform: translateY(-20px) rotate(180deg) scale(1.05); }
+    }
+
+    @keyframes pulseText {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .app-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: var(--app-max-width);
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--ios-body-bg);
+      display: flex;
+      flex-direction: column;
+      padding-bottom: calc(env(safe-area-inset-bottom, 24px) + 16px);
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.06);
+    }
+
+    /* --- HEADER --- */
+    .app-header {
+      width: 100%;
+      padding: calc(env(safe-area-inset-top, 0px) + 14px) 20px 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center; 
+      background: rgba(255, 255, 255, 0.85); 
+      backdrop-filter: blur(25px) saturate(190%); 
+      -webkit-backdrop-filter: blur(25px) saturate(190%);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 0.5px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .title-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center; 
+      padding-top: 4px;
+      /* HIỆU ỨNG ẨN MỜ DẦN MƯỢT MÀ */
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
+    }
+
+    /* Class kích hoạt ẩn chữ */
+    .title-wrapper.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .title-wrapper::after {
+      content: "";
+      position: absolute;
+      bottom: -14px;
+      width: 120%; 
+      height: 2.5px;  
+      background: linear-gradient(90deg, rgba(52, 199, 89, 0) 0%, rgba(36, 105, 61, 0.6) 50%, rgba(52, 199, 89, 0) 100%);
+      border-radius: 2px;
+    }
+
+    .app-header .header-title {
+      font-size: 16.5px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      line-height: 1;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #1C1C1E 30%, var(--ios-primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .ball-jumper {
+      position: absolute;
+      left: -15px;
+      top: -4px;
+      font-size: 12px;
+      line-height: 1;
+      z-index: 10;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 5px rgba(52, 199, 89, 0.5));
+      /* ĐÃ SỬA: Bỏ chữ "infinite" để quả bóng chỉ chạy duy nhất 1 lần rồi kết thúc hẳn */
+      animation: ballMoveHorizontal 4.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    @keyframes ballMoveHorizontal {
+      0% { left: -20px; transform: scale(0.8) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; transform: scale(1.1); }
+      80% { opacity: 1; transform: scale(1.1); }
+      90% { left: 110%; transform: scale(0.8) rotate(1440deg); opacity: 0; }
+      100% { left: 110%; opacity: 0; }
+    }
+
+    .live-top-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 59, 48, 0.08);
+      border: 1px solid rgba(255, 59, 48, 0.25);
+      padding: 5px 12px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #FF3B30;
+      letter-spacing: 0.5px;
+      animation: neuralPulse 2s infinite ease-in-out;
+    }
+
+    @keyframes neuralPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(255,59,48,0); }
+      50% { transform: scale(1.03); box-shadow: 0 0 12px rgba(255,59,48,0.15); border-color: rgba(255, 59, 48, 0.4); }
+    }
+
+    .live-top-badge .live-dot {
+      width: 7px;
+      height: 7px;
+      background-color: #FF3B30;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #FF3B30;
+      animation: pulse-dot 0.6s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulse-dot {
+      from { opacity: 0.5; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1.3); }
+    }
+
+    .app-content {
+      flex: 1;
+      padding: 16px 14px; 
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* --- TRÌNH PHÁT VIDEO --- */
+    .live-section {
+      width: 100%;
+      margin: 0;
+      display: none;
+      animation: iosScaleUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; 
+      overflow: hidden;
+      background: #000000;
+      border-radius: 12px;
+      border: 1px solid rgba(36, 105, 61, 0.3);
+      box-shadow: var(--ios-shadow-md);
+    }
+
+    .video-wrapper iframe,
+    .video-wrapper video {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      object-fit: cover; 
+      z-index: 1;
+      border-radius: 11px;
+    }
+
+    .video-loading {
+      position: absolute;
+      inset: 0;
+      background: #EBEBF0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+    }
+    
+    .video-loading::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+      animation: shimmerSweep 1.6s infinite linear;
+    }
+
+    @keyframes shimmerSweep {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .video-loading.hide {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(36, 105, 61, 0.08);
+      border-left-color: var(--ios-accent); 
+      border-radius: 50%;
+      animation: spin 0.8s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+      z-index: 3;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* --- KHUNG THẺ KHỐI --- */
+    .ios-card-section {
+      width: 100%;
+      background: var(--ios-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: var(--ios-radius-card);
+      padding: 16px;
+      box-shadow: var(--ios-shadow-sm);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      animation: iosReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .section-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #1C1C1E;
+      letter-spacing: -0.1px;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 14px;
+      background: linear-gradient(180deg, var(--ios-accent) 0%, var(--ios-primary) 100%);
+      box-shadow: 0 2px 6px rgba(52, 199, 89, 0.3);
+      border-radius: 4px;
+    }
+
+    .partner-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .promo-banner-large {
+      display: block;
+      width: 100%;
+      text-decoration: none;
+      position: relative;
+      border-radius: 14px;       
+      overflow: hidden;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s;
+    }
+
+    .promo-banner-large img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 410 / 33;   
+      object-fit: fill;         
+      border-radius: 14px;
+    }
+
+    .promo-banner-large:active, .banner-item:active {
+      transform: scale(0.97) !important;
+      filter: brightness(0.92);
+    }
+
+    /* --- BANNER SLIDER --- */
+    .banner-slider-container {
+      width: 100%;
+      overflow-x: auto; 
+      display: flex;
+      gap: 12px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch; 
+      scroll-snap-type: x mandatory; 
+      scrollbar-width: none; 
+      padding: 2px 0;
+    }
+
+    .banner-slider-container::-webkit-scrollbar {
+      display: none; 
+    }
+
+    .banner-item {
+      display: block;
+      flex: 0 0 78%; 
+      scroll-snap-align: start; 
+      text-decoration: none;
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-drag: none; 
+      -webkit-user-drag: none;
+    }
+
+    .banner-item img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain; 
+      pointer-events: none; 
+      border-radius: 14px;
+    }
+
+    @keyframes iosScaleUp {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes iosReveal {
+      from { transform: translateY(15px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MÀN HÌNH LOADING ĐẦU TRANG -->
+  <div id="appPreloader" class="app-preloader">
+    <div class="preloader-ball">⚽</div>
+    <div class="preloader-text">Đang kết nối luồng phát...</div>
+  </div>
+
+  <div class="app-container">
+    <header class="app-header">
+      <!-- Premium Light Badge -->
+      <div class="live-top-badge">
+        <svg class="wc-trophy-icon" width="13" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 2H18V5C18 7.21 16.21 9 14 9H10C7.79 9 6 7.21 6 5V2Z" fill="#FFD700"/>
+          <path d="M6 4H4C2.9 4 2 4.9 2 6V7C2 9.21 3.79 11 6 11V4Z" fill="#FFD700"/>
+          <path d="M18 4H20C21.1 4 22 4.9 22 6V7C22 9.21 20.21 11 18 11V4Z" fill="#FFD700"/>
+          <path d="M10 9H14V17H10V9Z" fill="#DAA520"/>
+          <path d="M12 14C13.6569 14 15 12.6569 15 11C15 9.34315 13.6569 8 12 8C10.3431 8 9 9.34315 9 11C9 12.6569 10.3431 14 12 14Z" fill="#FFD700"/>
+          <path d="M5 20H19V22H5V20Z" fill="#B8860B"/>
+          <path d="M8 17H16V20H8V17Z" fill="#DAA520"/>
+        </svg>
+        <span class="live-dot"></span>
+        LIVE
+      </div>
+
+      <!-- Title Header -->
+      <div class="title-wrapper" id="headerTitleWrapper">
+        <div class="ball-jumper">⚽</div>
+        <div class="header-title">WORLD CUP 2026</div>
+      </div>
+    </header>
+
+    <div class="app-content">
+      <!-- Player Card -->
+      <section class="live-section" id="liveSection">
+        <div class="video-wrapper">
+          <div class="video-loading" id="videoLoading">
+            <div class="spinner"></div>
+          </div>
+          <div id="videoContainer"></div>
+        </div>
+      </section>
+
+      <!-- KHUNG 1: ĐỐI TÁC UY TÍN -->
+      <section class="ios-card-section">
+        <h2 class="section-title">Đối Tác Uy Tín</h2>
+        <div class="partner-group">
+          <a class="promo-banner-large" href="https://vsbet43.com/reg/Y3XCSO" target="_blank" rel="noopener">
+            <img src="https://cdn.imgts.com/colatv/catfish/1781757641799_6nuoyg_banner_vsbet.gif" alt="VSBET" width="410" height="42">
+          </a>
+
+          <a class="promo-banner-large" href="https://8xbet500.com/reg/E9AY2O" target="_blank" rel="noopener">
+            <img src="https://khuyenmai.pages.dev/8xbet.GIF" alt="8XBET Khuyến Mãi" width="410" height="42">
+          </a>
+        </div>
+      </section>
+
+      <!-- KHUNG 2: KHUYẾN MÃI HẤP DẪN -->
+      <section class="ios-card-section">
+        <h2 class="section-title">Khuyến Mãi Hấp Dẫn</h2>
+        <div class="banner-slider-container" id="bannerContainer">
+          <a class="banner-item" href="https://v789bet3.top/Account/Register?f=5411907" target="_blank" rel="noopener">
+            <img src="789bet.gif" alt="789BET">
+          </a>
+          <a class="banner-item" href="https://www.qq1199.com/m/register?affiliateCode=p3ngx" target="_blank" rel="noopener">
+            <img src="qq88.gif" alt="QQ88">
+          </a>
+          <a class="banner-item" href="https://new88bi.com/Account/Register?f=7035276" target="_blank" rel="noopener">
+            <img src="new88.gif" alt="NEW88">
+          </a>
+          <a class="banner-item" href="https://www.jun8811.kim/?uagt=phaihi88e&path=signup" target="_blank" rel="noopener">
+            <img src="jun88.gif" alt="JUN88">
+          </a>
+          <a class="banner-item" href="https://m.hi7988.com/Register?f=6759899" target="_blank" rel="noopener">
+            <img src="hi88.gif" alt="HI88">
+          </a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- CHẶN COPIED/F12 -->
+  <script>
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("selectstart", e => e.preventDefault());
+    document.addEventListener("dragstart", e => e.preventDefault());
+    document.addEventListener("keydown", e => {
+      if (e.ctrlKey && ["c","u","s","p","x","a"].includes(e.key.toLowerCase())) e.preventDefault();
+      if (e.key === "F12" || (e.ctrlKey && e.shiftKey && ["i","j","c"].includes(e.key.toLowerCase()))) e.preventDefault();
+    });
+  </script>
+
+  <!-- LOGIC ĐỒNG BỘ API & TRÌNH PHÁT VIDEO CHỐNG LAG TỐI ƯU CAO -->
+  <script>
+    const API_URL = "https://vip.phaivan6593.workers.dev/api/config";
+    const DEFAULT_FALLBACK_STREAM = "https://live05.koepgd.app/live/16226575.m3u8";
+    const videoContainer = document.getElementById('videoContainer');
+    const videoLoading = document.getElementById('videoLoading');
+
+    function initAutoSlider() {
+      const slider = document.getElementById('bannerContainer');
+      if (!slider) return;
+
+      let isDown = false;
+      let startX, scrollLeft, autoPlayTimer;
+
+      function startAutoPlay() {
+        autoPlayTimer = setInterval(() => {
+          if (isDown) return; 
+          const items = slider.querySelectorAll('.banner-item');
+          if (!items.length) return;
+          const itemWidth = items[0].offsetWidth + 12; 
+          const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+          if (slider.scrollLeft >= maxScroll - 5) {
+            slider.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            slider.scrollBy({ left: itemWidth, behavior: 'smooth' });
+          }
+        }, 3000); 
+      }
+
+      function stopAutoPlay() { clearInterval(autoPlayTimer); }
+
+      slider.addEventListener('mousedown', (e) => {
+        isDown = true; stopAutoPlay();
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+      });
+      slider.addEventListener('mouseleave', () => { if (isDown) { isDown = false; startAutoPlay(); } });
+      slider.addEventListener('mouseup', () => { isDown = false; startAutoPlay(); });
+      slider.addEventListener('mousemove', (e) => {
+        if(!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startX) * 1.5; 
+        slider.scrollLeft = scrollLeft - walk;
+      });
+      slider.addEventListener('touchstart', stopAutoPlay, { passive: true });
+      slider.addEventListener('touchend', startAutoPlay, { passive: true });
+      startAutoPlay();
+    }
+
+    function parseYouTubeUrl(url) {
+      let id = '';
+      if (url.includes('youtube.com/live/')) {
+        id = url.split('youtube.com/live/')[1].split(/[?&]/)[0];
+      } else if (url.includes('youtu.be/')) {
+        id = url.split('youtu.be/')[1].split(/[?&]/)[0];
+      } else if (url.includes('v=')) {
+        id = url.split('v=')[1].split('&')[0];
+      } else if (url.includes('youtube.com/embed/')) {
+        id = url.split('youtube.com/embed/')[1].split(/[?&]/)[0];
+      }
+      return id ? `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=1&rel=0&playsinline=1&enablejsapi=1` : url;
+    }
+
+    function loadVideoSource(url) {
+      videoLoading.classList.remove('hide');
+      videoContainer.innerHTML = '';
+      const urlLower = url.toLowerCase();
+      
+      if (urlLower.includes('youtube.com') || urlLower.includes('youtu.be')) {
+        const embed = parseYouTubeUrl(url);
+        const iframe = document.createElement('iframe');
+        iframe.src = embed;
+        iframe.allow = "autoplay; encrypted-media; fullscreen; picture-in-picture";
+        iframe.setAttribute('allowfullscreen', 'true');
+        iframe.addEventListener('load', () => videoLoading.classList.add('hide'));
+        videoContainer.appendChild(iframe);
+      } 
+      else if (urlLower.match(/\.(mp4|webm|m3u8)/) || urlLower.includes('cam=')) {
+        const video = document.createElement('video');
+        video.controls = true; video.autoplay = true; video.muted = true;
+        video.playsInline = true;
+        video.setAttribute('webkit-playsinline', 'true');
+        video.setAttribute('x5-playsinline', 'true');
+        video.style.width = "100%"; video.style.height = "100%";
+
+        if (urlLower.includes('.m3u8')) {
+          if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+            const hls = new Hls({
+              maxBufferLength: 15, 
+              maxMaxBufferLength: 30,
+              enableWorker: true,
+              lowLatencyMode: true
+            });
+            hls.loadSource(url);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.ERROR, function (event, data) {
+              if (data.fatal) {
+                switch (data.type) {
+                  case Hls.ErrorTypes.NETWORK_ERROR: hls.startLoad(); break;
+                  case Hls.ErrorTypes.MEDIA_ERROR: hls.recoverMediaError(); break;
+                  default: break;
+                }
+              }
+            });
+          } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = url; 
+          }
+        } else { video.src = url; }
+
+        video.addEventListener('canplay', () => {
+          videoLoading.classList.add('hide');
+          video.play().catch(() => {});
+        });
+        videoContainer.appendChild(video);
+      } 
+      else {
+        const iframe = document.createElement('iframe');
+        iframe.src = url + (url.includes('?') ? '&' : '?') + 'autoplay=1&muted=1&enablejsapi=1';
+        iframe.allow = "autoplay; fullscreen";
+        iframe.setAttribute('allowfullscreen', 'true');
+        iframe.addEventListener('load', () => videoLoading.classList.add('hide'));
+        videoContainer.appendChild(iframe);
+      }
+    }
+
+    function unlockAutoplay() {
+      const media = videoContainer.querySelector('video');
+      if (media) { media.muted = false; media.play().catch(() => {}); }
+      
+      const iframe = videoContainer.querySelector('iframe');
+      if (iframe && iframe.contentWindow && iframe.src.includes('youtube.com')) {
+        try {
+          iframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+          iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+        } catch (e) {
+          console.warn("Autoplay unlock block:", e);
+        }
+      }
+      ['click', 'touchstart'].forEach(evt => document.removeEventListener(evt, unlockAutoplay));
+    }
+    ['click', 'touchstart'].forEach(evt => document.addEventListener(evt, unlockAutoplay, { passive: true }));
+
+    async function syncConfig() {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000); 
+
+        const res = await fetch(API_URL, { cache: "no-store", signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (!res.ok) throw new Error("Network error");
+        const cfg = await res.json();
+
+        const liveSection = document.getElementById('liveSection');
+        if (cfg.live_enabled && cfg.show_live_on_home) {
+          liveSection.style.display = "block";
+          if (cfg.live_url) loadVideoSource(cfg.live_url);
+        } else {
+          liveSection.style.display = "none";
+        }
+
+        const banners = document.querySelectorAll('#bannerContainer .banner-item');
+        if (Array.isArray(cfg.banners) && cfg.banners.length) {
+          banners.forEach((anchor, idx) => {
+            const apiBanner = cfg.banners[idx];
+            if (apiBanner) {
+              if (apiBanner.href && apiBanner.href !== "#" && apiBanner.href.trim() !== "") {
+                anchor.setAttribute("href", apiBanner.href);
+              }
+              const img = anchor.querySelector('img');
+              if (img && apiBanner.img && apiBanner.img.trim() !== "") {
+                img.setAttribute("src", apiBanner.img);
+              }
+            }
+          });
+        }
+      } catch (err) {
+        console.error("Config fetch error:", err);
+        document.getElementById('liveSection').style.display = "block";
+        loadVideoSource(DEFAULT_FALLBACK_STREAM);
+      } finally {
+        const preloader = document.getElementById('appPreloader');
+        if (preloader) preloader.classList.add('fade-out');
+        
+        /* CHỈNH SỬA CHÍNH: 
+           Chờ đúng 4.5 giây (bằng thời gian quả bóng chạy qua chữ) 
+           rồi mới bắt đầu làm mờ và ẩn chữ đi hoàn toàn.
+        */
+        setTimeout(() => {
+          const headerTitle = document.getElementById('headerTitleWrapper');
+          if (headerTitle) headerTitle.classList.add('fade-out');
+        }, 4500); 
+
+        initAutoSlider();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', syncConfig);
+  </script>
+</body>
+</html>

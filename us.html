@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ENGINEERING FM Pro</title>
+    
+    <!-- KHU VỰC THẺ META THUMBNAIL CHIA SẺ LINK (OPEN GRAPH) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ENGINEERING FM - Học Tiếng Anh Kỹ Thuật Khách Sạn">
+    <meta property="og:description" content="Ứng dụng luyện nghe phát âm và trắc nghiệm tiếng Anh chuyên ngành kỹ thuật, bảo trì khách sạn chuẩn giao diện iOS.">
+    <meta property="og:image" content="en.png"> 
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ios-blue: #007af5;
+            --ios-green: #34c759;
+            --ios-red: #ff3b30;
+            --ios-bg: #f2f2f7;
+            --ios-card: #ffffff;
+            --ios-text: #1c1c1e;
+            --ios-subtext: #8e8e93;
+            --gradient-accent: linear-gradient(135deg, #007af5, #0056b3);
+            --gradient-green: linear-gradient(135deg, #34c759, #28a745);
+            --gradient-red: linear-gradient(135deg, #ff3b30, #dc3545);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--ios-bg);
+            color: var(--ios-text);
+            padding-bottom: 120px;
+            overflow-x: hidden;
+        }
+
+        /* iOS Header Luxury Glassmorphism */
+        header {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            padding: 24px 20px 20px 20px;
+            border-bottom: 0.5px solid rgba(0,0,0,0.06);
+            text-align: center;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+        }
+
+        .logo-container {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: default;
+        }
+        
+        .logo-container:hover {
+            transform: scale(1.04);
+        }
+
+        /* HIỆU ỨNG CHỮ ENGINEERING LOANG MÀU CHUYỂN ĐỘNG SIÊU ĐẸP */
+        .logo-main {
+            background: linear-gradient(
+                90deg, 
+                #1c1c1e 0%, 
+                #007af5 25%, 
+                #58a6ff 50%, 
+                #007af5 75%, 
+                #1c1c1e 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShimmer 3.5s linear infinite;
+            filter: drop-shadow(0 2px 4px rgba(0, 122, 245, 0.05));
+            transition: filter 0.3s ease;
+        }
+        
+        .logo-container:hover .logo-main {
+            filter: drop-shadow(0 4px 12px rgba(0, 122, 245, 0.25));
+        }
+
+        @keyframes textShimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: -200% center; }
+        }
+
+        .logo-sub {
+            background: var(--gradient-accent);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 9px;
+            font-size: 21px;
+            font-weight: 900;
+            margin-left: 2px;
+            box-shadow: 0 4px 12px rgba(0, 122, 245, 0.2);
+            letter-spacing: 0px;
+        }
+
+        /* iOS Dock Menu Floating & Blur */
+        nav {
+            position: fixed;
+            bottom: 24px; left: 24px; right: 24px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 0.5px solid rgba(255, 255, 255, 0.4);
+            border-radius: 26px;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            z-index: 100;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+            transform: translateZ(0);
+        }
+
+        nav button {
+            background: none; border: none;
+            display: flex; flex-direction: column; align-items: center;
+            color: var(--ios-subtext); font-size: 11px; font-weight: 600;
+            cursor: pointer; width: 30%;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav button .icon { 
+            font-size: 24px; 
+            margin-bottom: 4px; 
+            filter: grayscale(1) opacity(0.5);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s;
+        }
+        
+        nav button:active { transform: scale(0.88); }
+        nav button.active { color: var(--ios-blue); text-shadow: 0 0 10px rgba(0,122,245,0.1); }
+        nav button.active .icon { 
+            transform: scale(1.2) translateY(-3px); 
+            filter: grayscale(0) opacity(1);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 8px auto;
+            padding: 0 16px;
+        }
+
+        .page { 
+            display: none; 
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .page.active { 
+            display: block; 
+            opacity: 1; 
+            transform: translateY(0) scale(1);
+        }
+
+        .category-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #48484a;
+            text-transform: uppercase;
+            margin: 28px 0 10px 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .ios-list {
+            background: var(--ios-card);
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.015);
+            border: 0.5px solid rgba(0,0,0,0.03);
+            margin-bottom: 16px;
+        }
+
+        .ios-item {
+            padding: 18px 20px;
+            border-bottom: 0.5px solid #f2f2f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+        
+        .ios-item:last-child { border-bottom: none; }
+        .ios-item:hover { background: #fafafc; }
+
+        .item-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .en { font-size: 17px; font-weight: 700; color: #1c1c1e; }
+        .vi { font-size: 15px; color: var(--ios-blue); font-weight: 600; }
+        
+        .phonetic-badge { 
+            font-size: 13px; 
+            color: #d35400; 
+            font-weight: 600;
+            background: #fdf2e9;
+            padding: 4px 10px;
+            border-radius: 8px;
+            display: inline-block;
+            align-self: flex-start;
+            margin-top: 2px;
+            border: 0.5px solid rgba(211, 84, 0, 0.1);
+        }
+
+        .speak-btn {
+            background: #f2f2f7;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            margin-left: 12px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .speak-btn:hover { background: #e5e5ea; transform: scale(1.05); }
+        .speak-btn:active { transform: scale(0.9); }
+
+        /* INTERACTIVE QUIZ CARD */
+        #quiz-container {
+            background: var(--ios-card);
+            border-radius: 28px;
+            padding: 32px 24px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.025);
+            border: 0.5px solid rgba(0,0,0,0.03);
+            text-align: center;
+            position: relative;
+        }
+
+        .progress-bar-container {
+            width: 100%; height: 6px;
+            background: #e5e5ea; border-radius: 10px;
+            margin-bottom: 28px; overflow: hidden;
+        }
+
+        #progress-fill {
+            height: 100%; width: 0%;
+            background: var(--ios-green);
+            border-radius: 10px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .question-title { font-size: 13px; color: var(--ios-subtext); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
+        
+        .question-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+        
+        .question-text { font-size: 26px; font-weight: 800; color: #1c1c1e; letter-spacing: -0.5px; }
+
+        .options { display: flex; flex-direction: column; gap: 12px; }
+
+        .option-btn {
+            padding: 18px 20px; background: #f2f2f7;
+            border: 1.5px solid transparent; border-radius: 18px;
+            font-size: 16px; font-weight: 600; color: #1c1c1e;
+            cursor: pointer; text-align: left;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.25s, color 0.25s, border-color 0.25s;
+        }
+        
+        .option-btn:hover:not(:disabled) { background: #e5e5ea; transform: translateY(-1px); }
+        .option-btn:active:not(:disabled) { transform: scale(0.96); }
+
+        .feedback {
+            margin-top: 24px; padding: 20px; border-radius: 18px; display: none; text-align: left;
+            animation: iosSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 0.5px solid transparent;
+        }
+
+        @keyframes iosSlideIn {
+            from { transform: translateY(15px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .feedback.correct { background: rgba(52, 199, 89, 0.08); color: #1c6b2e; border-color: rgba(52, 199, 89, 0.15); }
+        .feedback.wrong { background: rgba(255, 60, 48, 0.06); color: #aa221a; border-color: rgba(255, 60, 48, 0.12); }
+        .feedback-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+        .explanation { font-size: 14px; line-height: 1.5; color: #2c2c2e; }
+
+        .next-btn {
+            margin-top: 24px; background: var(--gradient-accent); color: white;
+            border: none; padding: 16px; width: 100%; border-radius: 18px;
+            font-size: 16px; font-weight: 600; cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 122, 245, 0.25); display: none;
+            transition: all 0.2s;
+        }
+
+        .next-btn:active { transform: scale(0.97); filter: brightness(0.95); }
+
+        .finish-screen { padding: 40px 10px; }
+        .score-num { font-size: 84px; font-weight: 800; color: var(--ios-blue); letter-spacing: -2px; text-shadow: 0 4px 12px rgba(0,122,245,0.15); }
+        #confetti-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; border-radius: 28px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <span class="logo-main">ENGINEERING</span>
+            <span class="logo-sub">FM</span>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- TAB 1: TỪ VỰNG -->
+        <div id="page-vocab" class="page active">
+            <div class="category-title">🛏️ 1. Bedroom / Guest Room Area</div>
+            <div class="ios-list" id="bedroom-list"></div>
+
+            <div class="category-title">🚿 2. Bathroom Area</div>
+            <div class="ios-list" id="bathroom-list"></div>
+
+            <div class="category-title">🔌 3. Electrical & Equipment</div>
+            <div class="ios-list" id="electric-list"></div>
+
+            <div class="category-title">🏢 4. Public Area / Common Area</div>
+            <div class="ios-list" id="public-list"></div>
+            
+            <div class="category-title">🛠️ 5. Actions / Các hành động</div>
+            <div class="ios-list" id="action-list"></div>
+
+            <div class="category-title">⚠️ 6. Problem / Status Tình Trạng</div>
+            <div class="ios-list" id="problem-list"></div>
+        </div>
+
+        <!-- TAB 2: GIAO TIẾP -->
+        <div id="page-comm" class="page">
+            <div class="category-title">💬 MẪU CÂU ĐỐI THOẠI CHUYÊN NGÀNH</div>
+            <div class="ios-list" id="comm-list"></div>
+        </div>
+
+        <!-- TAB 3: LUYỆN TẬP -->
+        <div id="page-quiz" class="page">
+            <div id="quiz-container">
+                <canvas id="confetti-canvas"></canvas>
+                <div class="progress-bar-container">
+                    <div id="progress-fill"></div>
+                </div>
+                <div id="quiz-content"></div>
+                <div id="feedback-box" class="feedback"></div>
+                <button id="next-btn" class="next-btn" onclick="nextQuestion()">Tiếp tục</button>
+            </div>
+        </div>
+
+    </div>
+
+    <nav>
+        <button onclick="showPage('vocab')" id="nav-vocab" class="active">
+            <span class="icon">📖</span><span>Từ vựng</span>
+        </button>
+        <button onclick="showPage('comm')" id="nav-comm">
+            <span class="icon">🗣️</span><span>Giao tiếp</span>
+        </button>
+        <button onclick="showPage('quiz')" id="nav-quiz">
+            <span class="icon">⚡</span><span>Luyện tập</span>
+        </button>
+    </nav>
+
+    <script>
+        const data = {
+            bedroom: [
+                {en: "Television (TV)", vi: "Ti vi", p: "Tê-lê-vi-shờn", tag: "Phòng ngủ"},
+                {en: "Telephone", vi: "Điện thoại", p: "Tê-lê-phôn", tag: "Phòng ngủ"},
+                {en: "Bed", vi: "Giường", p: "Bét", tag: "Phòng ngủ"},
+                {en: "Curtain", vi: "Rèm", p: "Cơ-tờn", tag: "Phòng ngủ"},
+                {en: "Roller blind", vi: "Rèm cuốn", p: "Rô-lơ blai-ndờ", tag: "Phòng ngủ"},
+                {en: "Window / Door", vi: "Cửa sổ / Cửa đi", p: "Uyn đô - Đo", tag: "Phòng ngủ"},
+                {en: "Room key / master key", vi: "Chìa khóa / Chìa tổng", p: "Rum ki / Mát-xtờ ki", tag: "Phòng ngủ"},
+                {en: "Fan", vi: "Quạt", p: "Phan", tag: "Phòng ngủ"},
+                {en: "Air conditioner (AC)", vi: "Máy lạnh", p: "E con-đi-shờn-nờ", tag: "Phòng ngủ"}
+            ],
+            bathroom: [
+                {en: "Shower", vi: "Vòi sen", p: "Sao - ờ", tag: "Phòng tắm"},
+                {en: "Toilet", vi: "Bồn cầu", p: "Toi – lét", tag: "Phòng tắm"},
+                {en: "Bathtub", vi: "Bồn tắm", p: "Bath-tắm", tag: "Phòng tắm"},
+                {en: "Sink", vi: "Bồn rửa", p: "Sin - kh", tag: "Phòng tắm"},
+                {en: "Faucet / Tap", vi: "Vòi nước", p: "Pho – sịt / Tép", tag: "Phòng tắm"},
+                {en: "Water heater", vi: "Máy nước nóng", p: "Oa - tờ hi - tờ", tag: "Phòng tắm"},
+                {en: "Hair dryer", vi: "Máy sấy tóc", p: "He - drai - ờ", tag: "Phòng tắm"},
+                {en: "Mirror", vi: "Gương", p: "Mi - rờ", tag: "Phòng tắm"}
+            ],
+            electric: [
+                {en: "Light / Light bulb", vi: "Đèn / Bóng đèn", p: "Lai - tơ / Lai - tơ bớp", tag: "Hệ thống điện"},
+                {en: "Switch", vi: "Công tắc", p: "S-wuýt-ch", tag: "Hệ thống điện"},
+                {en: "Wiring", vi: "Hệ thống dây điện", p: "Woai - ơ – ring", tag: "Hệ thống điện"},
+                {en: "Socket / Outlet", vi: "Ổ điện", p: "Sóc - kết / Ao – lét", tag: "Hệ thống điện"},
+                {en: "Battery", vi: "Pin", p: "Bát - tơ – rì", tag: "Linh kiện điện"},
+                {en: "Refrigerator / Fridge", vi: "Tủ lạnh", p: "Ri - fri - giờ - rây - tờ / Phờ - rích-j", tag: "Thiết bị điện"}
+            ],
+            public: [
+                {en: "Elevator / Lift", vi: "Thang máy", p: "E - li - vây - tờ / Líp – tơ", tag: "Khu công cộng"},
+                {en: "Corridor", vi: "Hành lang", p: "Co - ri – đo", tag: "Khu công cộng"},
+                {en: "Lobby", vi: "Sảnh", p: "Lóp-by", tag: "Khu công cộng"}
+            ],
+            actions: [
+                {en: "Check", vi: "Kiểm tra", p: "Chéc-k", tag: "Hành động"},
+                {en: "Inspect", vi: "Kiểm tra kỹ", p: "In-spếch", tag: "Hành động"},
+                {en: "Fix / Repair", vi: "Sửa", p: "Phíx / Rì pai", tag: "Hành động"},
+                {en: "Replace", vi: "Thay thế", p: "Ri-pờ-lây", tag: "Hành động"},
+                {en: "Install", vi: "Lắp đặt", p: "In-stôl", tag: "Hành động"},
+                {en: "Adjust", vi: "Điều chỉnh", p: "Ờ- jắt", tag: "Hành động"},
+                {en: "Test", vi: "Kiểm tra vận hành", p: "Tét-st", tag: "Hành động"},
+                {en: "Open – Close", vi: "Mở - Đóng", p: "Ấu-pình / clôu-z", tag: "Hành động"},
+                {en: "Turn on – turn off", vi: "Bật - Tắt", p: "Trzơn-on / trzơn-ốp", tag: "Hành động"}
+            ],
+            problem: [
+                {en: "Not working", vi: "Không hoạt động", p: "Not uốc-king", tag: "Tình trạng thiết bị"},
+                {en: "Broken", vi: "Bị hỏng", p: "Brâu-kần", tag: "Tình trạng thiết bị"},
+                {en: "Damaged", vi: "Bị hư hại", p: "Đá-mịch-d", tag: "Tình trạng thiết bị"},
+                {en: "Leak / Leakage", vi: "Rò rỉ", p: "Líc-k / Líc-kịt", tag: "Tình trạng thiết bị"},
+                {en: "Blocked / Clogged", vi: "Bị tắc", p: "Blốc-t / Cloc-d", tag: "Tình trạng thiết bị"},
+                {en: "Loose", vi: "Bị lỏng", p: "Lu-s", tag: "Tình trạng thiết bị"},
+                {en: "No power", vi: "Không có điện", p: "Nâu-pao-ướ", tag: "Tình trạng thiết bị"},
+                {en: "Low pressure", vi: "Áp lực yếu", p: "Lâu-pres-sờ", tag: "Tình trạng thiết bị"},
+                {en: "Noisy", vi: "Ồn", p: "Nói-zi", tag: "Tình trạng thiết bị"}
+            ],
+            comm: [
+                {en: "Good morning, sir. I’m Engineering team.", vi: "Chào quý khách. Bộ phận kỹ thuật", p: "Gút mó-ning... Ai-m En-gi-niơ-ring tiêm", tag: "Chào hỏi cơ bản"},
+                {en: "Hello, Engineering Team. May I come in to fix the room?", vi: "Xin chào, bộ phận kỹ thuật. Tôi có thể vào để sửa phòng...?", p: "Hê-lô, en-gi-nia-ring tim...", tag: "Xin vào phòng"},
+                {en: "Sorry, could you repeat that, please?", vi: "Xin vui lòng nhắc lại", p: "Só-ri, cú idu ri-pít đát, plii-zơ?", tag: "Khi không hiểu khách nói"},
+                {en: "How long does it take to fix?", vi: "Mất bao lâu để sửa xong?", p: "Hao loong đơ ít teik tu phích?", tag: "Hỏi thời gian"},
+                {en: "It takes 15 minutes", vi: "Nó mất 15 phút", p: "Ít tek phíp tin mí nịt-s", tag: "Trả lời thời gian"},
+                {en: "I’m sorry for this inconvenience!", vi: "Tôi rất xin lỗi về sự bất tiện này!", p: "Ai am só ry pho dzít in-kờn-ví-ni-ình", tag: "Xin lỗi sửa lâu"},
+                {en: "I will turn off the power for a moment.", vi: "Tôi sẽ tắt điện trong giây lát.", p: "Ai wiu trzơn ốp dờ pao ờ fo ơ mấu mình", tag: "Dặn khách trước khi sửa"},
+                {en: "Power is restored", vi: "Điện đã có lại", p: "Pao ờ y rì-sờ-to", tag: "Báo có điện lại"},
+                {en: "All fixed. Please let me know if you need anything else.", vi: "Đã sửa xong. Nếu quý khách cần thêm bất kỳ hỗ trợ nào, vui lòng cho tôi biết.", p: "Ol phích-xịt, Pờ-li-zơ...", tag: "Báo khách sửa xong"},
+                {en: "It is working now.", vi: "Nó đã hoạt động", p: "Ol phích-xịt, Ít I uốc-king nou", tag: "Báo hoạt động lại"},
+                {en: "I will comeback later to fix. We need to replace some parts.", vi: "Tôi sẽ quay lại sửa sau, tôi cần thay thế 1 vài bộ phận", p: "Ai wiu com-béc lây-tờ to phít...", tag: "Chưa sửa được"},
+                {en: "You're welcome", vi: "Không có gì đâu ạ.", p: "Ziu-ờ weo-com", tag: "Khách cảm ơn"},
+                {en: "That’s quite all right", vi: "Không sao đâu", p: "Dzát quai ó rây", tag: "Khi khách xin lỗi"}
+            ]
+        };
+
+        function speakEnglish(text) {
+            let cleanText = text.replace(/\([^)]*\)/g, "").replace(/\/.*/, "").trim();
+            let utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.85;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function renderiOSLists() {
+            const sectors = {
+                'bedroom-list': data.bedroom, 'bathroom-list': data.bathroom, 'electric-list': data.electric,
+                'public-list': data.public, 'action-list': data.actions, 'problem-list': data.problem, 'comm-list': data.comm
+            };
+            for (let id in sectors) {
+                document.getElementById(id).innerHTML = sectors[id].map(item => `
+                    <div class="ios-item">
+                        <div class="item-content">
+                            <div class="en">${item.en}</div>
+                            <div class="vi">${item.vi}</div>
+                            <div class="phonetic-badge">🗣️ Đọc bồi: ${item.p}</div>
+                        </div>
+                        <button class="speak-btn" onclick="speakEnglish('${item.en.replace(/'/g, "\\'")}')">🔊</button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => {
+                p.style.display = 'none'; 
+                p.classList.remove('active');
+            });
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            
+            const targetPage = document.getElementById('page-' + pageId);
+            targetPage.style.display = 'block'; 
+            setTimeout(() => { targetPage.classList.add('active'); }, 10);
+            
+            document.getElementById('nav-' + pageId).classList.add('active');
+            if(pageId === 'quiz') startQuiz();
+        }
+
+        /* --- TRẮC NGHIỆM ĐỘNG --- */
+        let currentIdx = 0; let score = 0; let currentQuestions = [];
+
+        function startQuiz() {
+            currentIdx = 0; score = 0;
+            let fullPool = [...data.bedroom, ...data.bathroom, ...data.electric, ...data.public, ...data.actions, ...data.problem, ...data.comm];
+            currentQuestions = fullPool.sort(() => 0.5 - Math.random()).slice(0, 10);
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const fbBox = document.getElementById('feedback-box');
+            const nxtBtn = document.getElementById('next-btn');
+            fbBox.style.display = 'none'; nxtBtn.style.display = 'none';
+
+            let curItem = currentQuestions[currentIdx];
+            let choices = [curItem.vi];
+            while(choices.length < 4) {
+                let fullPool = [...data.bedroom, ...data.bathroom, ...data.electric, ...data.actions, ...data.problem, ...data.comm];
+                let randVi = fullPool[Math.floor(Math.random() * fullPool.length)].vi;
+                if(!choices.includes(randVi)) choices.push(randVi);
+            }
+            choices.sort(() => 0.5 - Math.random());
+
+            document.getElementById('progress-fill').style.width = (currentIdx / currentQuestions.length * 100) + '%';
+            
+            document.getElementById('quiz-content').innerHTML = `
+                <div class="question-title">Câu hỏi ${currentIdx + 1} / 10</div>
+                <div class="question-box">
+                    <div class="question-text">"${curItem.en}"</div>
+                    <button class="speak-btn" onclick="speakEnglish('${curItem.en.replace(/'/g, "\\'")}')">🔊</button>
+                </div>
+                <div class="options">
+                    ${choices.map(opt => `<button class="option-btn" onclick="verifyiOSChoice(this, '${opt}', '${curItem.vi}')">${opt}</button>`).join('')}
+                </div>
+            `;
+            
+            speakEnglish(curItem.en);
+        }
+
+        function verifyiOSChoice(btn, selected, correct) {
+            const fbBox = document.getElementById('feedback-box');
+            const nxtBtn = document.getElementById('next-btn');
+            let item = currentQuestions[currentIdx];
+            
+            document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+
+            if(selected === correct) {
+                score++;
+                btn.style.background = "var(--gradient-green)"; btn.style.color = "white"; btn.style.borderColor = "transparent";
+                triggerConfetti();
+                fbBox.innerHTML = `
+                    <div class="feedback-title">✓ Đúng rồi!</div>
+                    <div class="explanation">Nghĩa là: <b>"${item.vi}"</b> [${item.tag}]. <br>🗣️ Phiên âm bồi: <i>${item.p}</i></div>
+                `;
+                fbBox.className = "feedback correct";
+            } else {
+                btn.style.background = "var(--gradient-red)"; btn.style.color = "white"; btn.style.borderColor = "transparent";
+                document.querySelectorAll('.option-btn').forEach(b => {
+                    if(b.innerText === correct) { 
+                        b.style.background = "var(--gradient-green)"; b.style.color = "white"; b.style.borderColor = "transparent";
+                    }
+                });
+                
+                speakEnglish(item.en);
+
+                fbBox.innerHTML = `
+                    <div class="feedback-title">✕ Chưa chính xác</div>
+                    <div class="explanation">
+                        • <b>Đáp án đúng:</b> <span style="font-weight:700; color:var(--ios-red);">${correct}</span><br>
+                        • <b>Giải thích:</b> Từ <b>"${item.en}"</b> thuộc nhóm ngữ cảnh <i>[${item.tag}]</i>.<br>
+                        • <b>Phiên âm bồi:</b> <b>"${item.p}"</b> (Bấm nút loa 🔊 ở trên để nghe lại giọng đọc chuẩn).
+                    </div>
+                `;
+                fbBox.className = "feedback wrong";
+            }
+            fbBox.style.display = "block";
+            nxtBtn.style.display = "block";
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if(currentIdx < currentQuestions.length) { showQuestion(); } 
+            else { displayiOSResults(); }
+        }
+
+        function displayiOSResults() {
+            document.getElementById('progress-fill').style.width = '100%';
+            let evaluation = "Bạn hãy đọc lại danh sách từ vựng kết hợp nghe âm thanh để cải thiện nhé!";
+            if(score === 10) evaluation = "Cực kỳ xuất sắc! Bạn đã làm chủ hoàn toàn các thuật ngữ âm thanh này rồi! 🏆";
+            else if(score >= 7) evaluation = "Rất tốt! Khả năng nghe hiểu kỹ thuật của bạn rất đáng nể.";
+
+            document.getElementById('quiz-content').innerHTML = `
+                <div class="finish-screen">
+                    <h3 style="font-size:20px; font-weight:700; margin-bottom:10px;">HOÀN THÀNH KIỂM TRA</h3>
+                    <div class="score-num">${score}/10</div>
+                    <p style="font-size:15px; font-weight:500; color:var(--ios-subtext); margin-bottom: 24px; padding:0 20px;">${evaluation}</p>
+                    <button class="next-btn" style="display:block" onclick="startQuiz()">Làm đề thi mới 🔄</button>
+                </div>
+            `;
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('feedback-box').style.display = 'none';
+        }
+
+        function triggerConfetti() {
+            const canvas = document.getElementById("confetti-canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = canvas.parentElement.offsetHeight;
+            let particles = [];
+            const colors = ['#007af5', '#34c759', '#ff9500', '#ff3b30', '#af52de'];
+            
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x: canvas.width / 2, y: canvas.height / 2,
+                    w: Math.random() * 6 + 4, h: Math.random() * 10 + 6,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    vx: (Math.random() - 0.5) * 10, vy: (Math.random() - 0.5) * 10 - 3,
+                    rotation: Math.random() * 360, rotationSpeed: (Math.random() - 0.5) * 10,
+                    alpha: 1
+                });
+            }
+            
+            function update() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let alive = false;
+                particles.forEach(p => {
+                    p.x += p.vx; p.y += p.vy; p.vy += 0.12; p.alpha -= 0.015;
+                    p.rotation += p.rotationSpeed;
+                    if (p.alpha > 0) {
+                        alive = true;
+                        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rotation * Math.PI / 180);
+                        ctx.fillStyle = p.color; ctx.globalAlpha = p.alpha;
+                        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h); ctx.restore();
+                    }
+                });
+                if (alive) requestAnimationFrame(update);
+            }
+            update();
+        }
+
+        renderiOSLists();
+    </script>
+</body>
+</html>

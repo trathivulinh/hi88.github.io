@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Admin World Cup 2026 - LIVE & Banners</title>
+<style>
+  :root {
+    --ios-bg: #FFFFFF;
+    --ios-body-bg: #F2F2F7;
+    --ios-text-main: #000000;
+    --ios-text-sub: #3C3C43;
+    --ios-primary: #007AFF;
+    --ios-green: #34C759;
+    --ios-red: #FF3B30;
+    --theme-color: #24693D; /* Màu thương hiệu World Cup 2026 */
+    --ios-radius: 16px;
+    --ios-shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
+    --ios-shadow-md: 0 20px 40px rgba(0, 0, 0, 0.06);
+    --input-bg: #E3E3E9;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 0;
+    background-color: var(--ios-body-bg);
+    color: var(--ios-text-main);
+    padding-bottom: calc(env(safe-area-inset-bottom, 24px) + 32px);
+    line-height: 1.4;
+  }
+
+  /* --- LOGIN SCREEN MODERN UI --- */
+  .login-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 95vh;
+    padding: 20px;
+  }
+  
+  .login-card {
+    background: var(--ios-bg);
+    border-radius: var(--ios-radius);
+    padding: 40px 28px;
+    width: 100%;
+    box-shadow: var(--ios-shadow-md);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    text-align: center;
+    animation: iosScaleUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  
+  .login-title {
+    margin: 0 0 10px 0;
+    color: var(--theme-color);
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  
+  .login-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: var(--ios-body-bg);
+    border-radius: 12px;
+    margin-top: 24px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    text-align: center;
+    transition: all 0.25s;
+  }
+  .login-input:focus {
+    border-color: var(--theme-color);
+    background: var(--ios-bg);
+    box-shadow: 0 0 0 4px rgba(36, 105, 61, 0.15);
+  }
+  
+  .login-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--theme-color);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(36, 105, 61, 0.2);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .login-btn:active, .btn:active {
+    transform: scale(0.95);
+    opacity: 0.9;
+  }
+
+  /* --- APP HEADER STICKY GLASS --- */
+  .app-bar {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    padding: calc(env(safe-area-inset-top, 0px) + 16px) 20px 14px 20px;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .app-bar h1 {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--theme-color);
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+  
+  /* --- CONTAINERS & CONTROLS --- */
+  .admin-content {
+    display: none;
+    padding: 16px;
+  }
+  .admin-content.authenticated {
+    display: block;
+    animation: iosReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 480px) {
+    .grid { grid-template-columns: 1fr; gap: 12px; }
+  }
+
+  .card {
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    border-radius: var(--ios-radius);
+    padding: 20px 18px;
+    margin-bottom: 18px;
+    background: var(--ios-bg);
+    box-shadow: var(--ios-shadow-sm);
+  }
+  .card h2 {
+    font-size: 16.5px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    letter-spacing: -0.3px;
+    color: var(--ios-text-main);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card h2::before {
+    content: "";
+    width: 4px;
+    height: 14px;
+    background: var(--theme-color);
+    border-radius: 4px;
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #636366;
+    margin-bottom: 6px;
+    padding-left: 2px;
+  }
+
+  /* --- MODERN CUSTOM IOS SWITCH --- */
+  .toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--ios-body-bg);
+    padding: 12px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+  }
+  .toggle-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ios-text-main);
+  }
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 51px;
+    height: 31px;
+  }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: var(--input-bg);
+    transition: .3s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 34px;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 27px; width: 27px;
+    left: 2px; bottom: 2px;
+    background-color: white;
+    transition: .3s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 50%;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  }
+  input:checked + .slider { background-color: var(--ios-green); }
+  input:checked + .slider:before { transform: translateX(20px); }
+
+  /* MODERN INPUT WRAPPER WITH CLEAR BUTTON */
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  
+  input[type="url"], input[type="text"], input[type="password"], select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    background: var(--ios-body-bg);
+    font-size: 14px;
+    color: var(--ios-text-main);
+    transition: all 0.2s ease;
+    -webkit-appearance: none;
+  }
+  
+  .input-wrapper input {
+    padding-right: 36px;
+  }
+  
+  input[type="url"]:focus, input[type="text"]:focus, input[type="password"]:focus, select:focus {
+    border-color: var(--theme-color);
+    background: var(--ios-bg);
+    box-shadow: 0 0 0 3px rgba(36, 105, 61, 0.1);
+  }
+
+  .clear-btn {
+    position: absolute;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.5);
+    border: none;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    cursor: pointer;
+    user-select: none;
+    z-index: 5;
+  }
+  .input-wrapper input:not(:placeholder-shown) + .clear-btn {
+    display: flex;
+  }
+
+  /* --- ACTIONS CONTAINER BUTTONS --- */
+  .row-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: var(--ios-body-bg);
+    padding: 6px;
+    border-radius: 14px;
+    margin-top: 18px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 11px 16px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--ios-bg);
+    color: var(--ios-text-main);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    gap: 6px;
+  }
+  .btn.secondary {
+    background: transparent;
+    box-shadow: none;
+    color: var(--ios-primary);
+  }
+  .btn.danger-action {
+    background: rgba(255, 59, 48, 0.1);
+    color: var(--ios-red);
+    box-shadow: none;
+  }
+  .btn.danger-action:hover {
+    background: var(--ios-red);
+    color: #fff;
+  }
+  .btn.primary-action {
+    background: var(--theme-color);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(36, 105, 61, 0.2);
+  }
+  .btn.icon-only {
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+    padding: 0;
+    flex: none;
+    border-radius: 12px;
+  }
+  .btn:disabled {
+    background: rgba(0,0,0,0.05);
+    color: #AEAEB2;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+  .btn svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    transition: transform 0.2s ease;
+  }
+  .btn:active svg {
+    transform: scale(0.88);
+  }
+
+  /* --- BADGE STATUS --- */
+  .status-wrapper {
+    margin-top: 12px;
+    min-height: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    animation: iosReveal 0.3s ease both;
+  }
+  .badge.info { background: rgba(0, 122, 255, 0.1); color: var(--ios-primary); }
+  .badge.success { background: rgba(52, 199, 89, 0.15); color: #248A3D; }
+  .badge.error { background: rgba(255, 59, 48, 0.1); color: var(--ios-red); }
+
+  .banner-block {
+    background: var(--ios-body-bg);
+    padding: 14px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+  }
+  .banner-block h3 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--theme-color);
+  }
+  
+  .loading {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(0,0,0,0.1);
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  @keyframes iosScaleUp {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  @keyframes iosReveal {
+    from { transform: translateY(8px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  /* --- SYSTEM DARK MODE --- */
+  @media (prefers-color-scheme: dark){
+    :root {
+      --ios-bg: #1C1C1E;
+      --ios-body-bg: #000000;
+      --ios-text-main: #FFFFFF;
+      --ios-text-sub: #AEAEB2;
+      --input-bg: #3A3A3C;
+      --ios-shadow-sm: 0 4px 14px rgba(0,0,0,0.25);
+    }
+    body { background-color: var(--ios-body-bg); color: var(--ios-text-main); }
+    .app-bar { background: rgba(28, 28, 30, 0.8); border-bottom-color: rgba(255, 255, 255, 0.06); }
+    .toggle-container { background: #2C2C2E; }
+    .banner-block { background: #2C2C2E; }
+    input[type="url"], input[type="text"], input[type="password"], select { background: #2C2C2E; border-color: rgba(255,255,255,0.02); color: #FFF; }
+    .btn { background: #2C2C2E; color: #FFFFFF; }
+    .btn.secondary { color: var(--ios-primary); }
+    .btn.danger-action { background: rgba(255, 39, 30, 0.15); color: #FF453A; }
+    .btn.primary-action { background: var(--theme-color); color: #fff; }
+    .row-actions { background: #1C1C1E; border: 1px solid rgba(255,255,255,0.05); }
+    .btn:disabled { background: #3A3A3C; color: #747476; }
+    .loading { border-color: rgba(255,255,255,0.1); }
+    .badge.success { background: rgba(52, 199, 89, 0.2); color: #34C759; }
+    label { color: #AEAEB2; }
+    .clear-btn { background: rgba(255, 255, 255, 0.15); color: rgba(255, 255, 255, 0.7); }
+    optgroup { background: #1C1C1E; color: #FFF; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Screen 1: Login -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <h1 class="login-title">⚽ FIFA WC 2026 Admin</h1>
+      <p style="color: var(--ios-text-sub); margin: 0; font-size: 14px;">Nhập mật khẩu cấu hình tổng để vào hệ thống.</p>
+      <input type="password" id="loginPassword" class="login-input" placeholder="Mật khẩu mã khóa..." />
+      <button class="login-btn" onclick="checkPassword()">Xác minh đăng nhập</button>
+      <div id="loginError" class="login-error" style="display: none; color: var(--ios-red); font-size: 13px; margin-top: 12px; font-weight: 600;"></div>
+    </div>
+  </div>
+
+  <!-- Screen 2: Control Panel Content -->
+  <div id="adminContent" class="admin-content">
+    <header class="app-bar">
+      <h1>🎛️ Control Panel</h1>
+      <button class="btn secondary" onclick="logout()" style="font-size: 12px; padding: 6px 12px; border-radius: 8px; min-height: auto; flex: none;">Đăng xuất</button>
+    </header>
+
+    <div class="app-content" style="padding-top: 16px;">
+      
+      <!-- Khối cấu hình API kết nối -->
+      <div class="card">
+        <h2>Kết nối dữ liệu</h2>
+        <div class="grid">
+          <div>
+            <label>API Endpoint (Worker URL)</label>
+            <div class="input-wrapper">
+              <input id="api" type="url" value="https://vip.phaivan6593.workers.dev/api/config" required placeholder=" ">
+              <button class="clear-btn" onclick="clearInput('api')">✕</button>
+            </div>
+          </div>
+          <div>
+            <label>Admin Token (Bearer Key)</label>
+            <input id="token" type="password" placeholder="Mã bảo mật lưu dữ liệu" required>
+          </div>
+        </div>
+        
+        <div class="row-actions">
+          <button class="btn" id="load">Tải cấu hình</button>
+          <button class="btn secondary" id="ping">Kiểm tra kết nối</button>
+          <button class="btn primary-action" id="save">Lưu cấu hình</button>
+        </div>
+        
+        <div class="status-wrapper">
+          <span id="status"></span>
+          <span id="save_status"></span>
+        </div>
+      </div>
+
+      <!-- Khối điều khiển luồng phát trực tiếp -->
+      <div class="card">
+        <h2>Luồng phát LIVE</h2>
+        <div class="grid" style="margin-bottom: 14px;">
+          <div class="toggle-container" onclick="document.getElementById('live_enabled').click();">
+            <span class="toggle-title">Kích hoạt LIVE</span>
+            <label class="switch">
+              <input type="checkbox" id="live_enabled" onclick="event.stopPropagation();">
+              <span class="slider"></span>
+            </label>
+          </div>
+          
+          <div class="toggle-container" onclick="document.getElementById('show_live_on_home').click();">
+            <span class="toggle-title">Show ở Trang Chủ</span>
+            <label class="switch">
+              <input type="checkbox" id="show_live_on_home" onclick="event.stopPropagation();">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+        
+        <!-- Dropdown Chọn nhanh danh sách nguồn m3u8 -->
+        <label>Chọn từ danh sách BLV</label>
+        <select id="blv_selector" onchange="selectBLV(this.value)" style="margin-bottom: 12px; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23636366%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 14px top 50%; background-size: 12px auto; padding-right: 35px;">
+          <option value="">-- Chọn một Bình Luận Viên --</option>
+          
+          <optgroup label="Danh sách nguồn mới cập nhật">
+            <option value="https://alive.yarncdn.live/tdtv_blv_taotinhtao/tracks-v2a1/mono.m3u8" style="color: #24693D; font-weight: bold;">• BLV TÁO GIÀ</option>
+            <option value="https://alive.yarncdn.live/tdtv_blv_phanca/tracks-v2a1/mono.m3u8" style="color: #24693D; font-weight: bold;">• BLV PHAN CA</option>
+            <option value="https://alive.yarncdn.live/tdtv_blv_phanliem/tracks-v2a1/mono.m3u8" style="color: #24693D; font-weight: bold;">• BLV LƯƠNG BỔNG</option>
+            <option value="https://alive.yarncdn.live/tdtv_blv_phanquay/tracks-v2a1/mono.m3u8" style="color: #24693D; font-weight: bold;">• BLV PHAN QUAY</option>
+            <option value="https://alive.yarncdn.live/tdtv_blv_taovannghe/tracks-v2a1/mono.m3u8" style="color: #24693D; font-weight: bold;">• BLV THẦN THÔNG</option>
+            <option value="https://alive.yarncdn.live/tdtv_blv_phananh/tracks-v2a1/mono.m3u8" style="color: #24693D; font-weight: bold;">• BLV PHAN ANH</option>
+          </optgroup>
+
+          <optgroup label="Danh sách nguồn cũ">
+            <option value="https://live05.bfgrut.app/live/59444581.m3u8">BLV PESSI</option>
+            <option value="https://live05.bfgrut.app/live/14830711.m3u8">BLV GÀ VÀNG</option>
+            <option value="https://live05.bfgrut.app/live/90865415.m3u8">BLV 247</option>
+            <option value="https://live05.bfgrut.app/live/16226575.m3u8">BLV FANTA</option>
+            <option value="https://live05.bfgrut.app/live/99121525.m3u8">BLV BÍ ĐAO</option>
+            <option value="https://live05.bfgrut.app/live/87379114.m3u8">BLV COZY</option>
+            <option value="https://live05.bfgrut.app/live/82054853.m3u8">BLV ROCK STAR</option>
+            <option value="https://live05.bfgrut.app/live/19919577.m3u8">BLV Pocari</option>
+            <option value="https://live05.bfgrut.app/live/78905744.m3u8">BLV 7UP</option>
+            <option value="https://live05.bfgrut.app/live/24561735.m3u8">BLV COCA</option>
+            <option value="https://live05.bfgrut.app/live/08552895.m3u8">BLV C2</option>
+          </optgroup>
+        </select>
+
+        <!-- Ô nhập liệu thủ công / Hiển thị link đã chọn và Nút Xoá khỏi danh sách hiển thị -->
+        <label>Đường dẫn tài nguyên luồng phát (Live URL)</label>
+        <div class="grid" style="grid-template-columns: 1fr auto; gap: 8px; align-items: center;">
+          <div class="input-wrapper">
+            <input id="live_url" type="url" placeholder="Chọn ở trên hoặc tự dán link stream (.m3u8, .mp4...) vào đây">
+            <button class="clear-btn" onclick="clearInput('live_url')">✕</button>
+          </div>
+          
+          <!-- Icon Thùng Rác Xoá (SF Trash Icon) -->
+          <button id="delete_blv_btn" class="btn danger-action icon-only" onclick="deleteSelectedBLV()" style="display: none;" title="Xoá BLV đang chọn">
+            <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Khối liên kết đích quảng cáo -->
+      <div class="card">
+        <h2>Cấu hình Slider Banners Khuyến Mãi (Tối đa 5)</h2>
+        <div id="bannerInputsContainer">
+          <!-- Banner 1 -->
+          <div class="banner-block">
+            <h3>Banner 1</h3>
+            <div class="grid">
+              <div>
+                <label>Link Đích (Href)</label>
+                <div class="input-wrapper">
+                  <input id="b1_href" type="url" placeholder="https://...">
+                  <button class="clear-btn" onclick="clearInput('b1_href')">✕</button>
+                </div>
+              </div>
+              <div><label>Link Ảnh (Image Src)</label><input id="b1_img" type="text" placeholder="789bet.gif"></div>
+            </div>
+          </div>
+          <!-- Banner 2 -->
+          <div class="banner-block">
+            <h3>Banner 2</h3>
+            <div class="grid">
+              <div>
+                <label>Link Đích (Href)</label>
+                <div class="input-wrapper">
+                  <input id="b2_href" type="url" placeholder="https://...">
+                  <button class="clear-btn" onclick="clearInput('b2_href')">✕</button>
+                </div>
+              </div>
+              <div><label>Link Ảnh (Image Src)</label><input id="b2_img" type="text" placeholder="qq88.gif"></div>
+            </div>
+          </div>
+          <!-- Banner 3 -->
+          <div class="banner-block">
+            <h3>Banner 3</h3>
+            <div class="grid">
+              <div>
+                <label>Link Đích (Href)</label>
+                <div class="input-wrapper">
+                  <input id="b3_href" type="url" placeholder="https://...">
+                  <button class="clear-btn" onclick="clearInput('b3_href')">✕</button>
+                </div>
+              </div>
+              <div><label>Link Ảnh (Image Src)</label><input id="b3_img" type="text" placeholder="new88.gif"></div>
+            </div>
+          </div>
+          <!-- Banner 4 -->
+          <div class="banner-block">
+            <h3>Banner 4</h3>
+            <div class="grid">
+              <div>
+                <label>Link Đích (Href)</label>
+                <div class="input-wrapper">
+                  <input id="b4_href" type="url" placeholder="https://...">
+                  <button class="clear-btn" onclick="clearInput('b4_href')">✕</button>
+                </div>
+              </div>
+              <div><label>Link Ảnh (Image Src)</label><input id="b4_img" type="text" placeholder="jun88.gif"></div>
+            </div>
+          </div>
+          <!-- Banner 5 -->
+          <div class="banner-block">
+            <h3>Banner 5</h3>
+            <div class="grid">
+              <div>
+                <label>Link Đích (Href)</label>
+                <div class="input-wrapper">
+                  <input id="b5_href" type="url" placeholder="https://...">
+                  <button class="clear-btn" onclick="clearInput('b5_href')">✕</button>
+                </div>
+              </div>
+              <div><label>Link Ảnh (Image Src)</label><input id="b5_img" type="text" placeholder="hi88.gif"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const ADMIN_PASSWORD = "353508"; 
+const SESSION_KEY = "admin_authenticated";
+const bannerIndices = [1, 2, 3, 4, 5];
+let autoSaveTimeout = null;
+let isSyncingData = false;
+
+function selectBLV(url) {
+  const deleteBtn = document.getElementById("delete_blv_btn");
+  const selector = document.getElementById("blv_selector");
+  
+  if (url) {
+    document.getElementById("live_url").value = url;
+    deleteBtn.style.display = selector.selectedIndex > 0 ? "inline-flex" : "none";
+    triggerAutoSave();
+  } else {
+    deleteBtn.style.display = "none";
+  }
+}
+
+function deleteSelectedBLV() {
+  const selector = document.getElementById("blv_selector");
+  const selectedIndex = selector.selectedIndex;
+  
+  if (selectedIndex <= 0) return;
+  
+  const selectedOption = selector.options[selectedIndex];
+  const confirmDelete = confirm(`❓ Bạn có chắc chắn muốn ẩn tạm thời "${selectedOption.textContent}" khỏi danh sách hiển thị không?`);
+  
+  if (confirmDelete) {
+    selectedOption.remove();
+    
+    selector.value = "";
+    document.getElementById("live_url").value = "";
+    document.getElementById("delete_blv_btn").style.display = "none";
+    
+    showStatus("save_status", "Đã ẩn BLV khỏi danh sách!", "success");
+    triggerAutoSave();
+  }
+}
+
+function clearInput(id) {
+  const input = document.getElementById(id);
+  input.value = "";
+  input.focus();
+  if (id === 'live_url') {
+    document.getElementById("blv_selector").value = "";
+    document.getElementById("delete_blv_btn").style.display = "none";
+  }
+  triggerAutoSave();
+}
+
+function checkPassword() {
+  const password = document.getElementById("loginPassword").value;
+  const errorEl = document.getElementById("loginError");
+  
+  if (password === ADMIN_PASSWORD) {
+    sessionStorage.setItem(SESSION_KEY, "true");
+    showAdminContent();
+    errorEl.style.display = "none";
+  } else {
+    errorEl.textContent = "Mật mã bảo mật không chính xác!";
+    errorEl.style.display = "block";
+    document.getElementById("loginPassword").value = "";
+    document.getElementById("loginPassword").focus();
+  }
+}
+
+function showAdminContent() {
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("adminContent").classList.add("authenticated");
+  initAutoSaveListeners();
+}
+
+function logout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById("loginScreen").style.display = "flex";
+  document.getElementById("adminContent").classList.remove("authenticated");
+  document.getElementById("loginPassword").value = "";
+}
+
+window.addEventListener('load', () => {
+  if (sessionStorage.getItem(SESSION_KEY) === "true") showAdminContent();
+  document.getElementById("loginPassword").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") checkPassword();
+  });
+});
+
+function setLoading(buttonId, isLoading, originalText) {
+  const btn = document.getElementById(buttonId);
+  if (!btn) return;
+  if (isLoading) {
+    btn.disabled = true;
+    btn.innerHTML = `<span class="loading"></span>${originalText}`;
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  }
+}
+
+function showStatus(targetId, text, type) {
+  const el = document.getElementById(targetId);
+  if (!el) return;
+  if (!text) { 
+    el.innerHTML = ''; 
+  } else {
+    el.innerHTML = `<span class="badge ${type}">${text}</span>`;
+  }
+}
+
+function triggerAutoSave() {
+  if (isSyncingData) return;
+  
+  const token = document.getElementById("token").value.trim();
+  if (!token) {
+    showStatus("save_status", "Auto-save chờ nhập Admin Token...", "info");
+    return;
+  }
+
+  clearTimeout(autoSaveTimeout);
+  showStatus("save_status", "Thay đổi đã ghi nhận...", "info");
+  
+  autoSaveTimeout = setTimeout(() => {
+    document.getElementById("save").click();
+  }, 1500); 
+}
+
+function initAutoSaveListeners() {
+  const inputs = document.querySelectorAll('#live_enabled, #show_live_on_home, #live_url, #blv_selector, [id^="b"][id$="_href"], [id^="b"][id$="_img"]');
+  inputs.forEach(input => {
+    if (input.type === 'checkbox' || input.tagName === 'SELECT') {
+      input.addEventListener('change', triggerAutoSave);
+    } else {
+      input.addEventListener('input', triggerAutoSave);
+    }
+  });
+}
+
+// SỰ KIỆN: PING
+document.getElementById("ping").onclick = async () => {
+  const apiUrl = document.getElementById("api").value;
+  showStatus("save_status", "", ""); 
+  showStatus("status", "Đang kết nối...", "info");
+  setLoading("ping", true, "Kiểm tra kết nối");
+  
+  try {
+    const r = await fetch(apiUrl, { method: "GET", cache: "no-store", headers: { "Accept": "application/json" } });
+    if (r.ok) {
+      showStatus("status", "Kết nối thành công (API OK)", "success");
+    } else {
+      showStatus("status", `Lỗi phản hồi HTTP: ${r.status}`, "error");
+    }
+  } catch (e) {
+    showStatus("status", "Không thể kết nối đến Worker.", "error");
+  } finally {
+    setLoading("ping", false, "Kiểm tra kết nối");
+  }
+};
+
+// SỰ KIỆN: GET LOAD
+document.getElementById("load").onclick = async () => {
+  const apiUrl = document.getElementById("api").value;
+  showStatus("save_status", "", "");
+  showStatus("status", "Đang đồng bộ...", "info");
+  setLoading("load", true, "Tải cấu hình");
+  isSyncingData = true;
+  
+  try {
+    const r = await fetch(apiUrl, { method: "GET", cache: "no-store", headers: { "Accept": "application/json" } });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    
+    const d = await r.json();
+    document.getElementById("live_enabled").checked = !!d.live_enabled;
+    document.getElementById("show_live_on_home").checked = !!d.show_live_on_home;
+    
+    const currentLiveUrl = d.live_url || "";
+    document.getElementById("live_url").value = currentLiveUrl;
+    
+    const selectEl = document.getElementById("blv_selector");
+    selectEl.value = ""; 
+    for (let i = 0; i < selectEl.options.length; i++) {
+      if (selectEl.options[i].value === currentLiveUrl) {
+        selectEl.value = currentLiveUrl;
+        break;
+      }
+    }
+    
+    document.getElementById("delete_blv_btn").style.display = selectEl.selectedIndex > 0 ? "inline-flex" : "none";
+    
+    bannerIndices.forEach((num, idx) => {
+      const apiBanner = (Array.isArray(d.banners) && d.banners[idx]) ? d.banners[idx] : null;
+      document.getElementById(`b${num}_href`).value = apiBanner && apiBanner.href && apiBanner.href !== "#" ? apiBanner.href : "";
+      document.getElementById(`b${num}_img`).value = apiBanner && apiBanner.img ? apiBanner.img : "";
+    });
+    
+    showStatus("status", "Đồng bộ cấu hình OK!", "success");
+  } catch (e) {
+    showStatus("status", "Lỗi đồng bộ dữ liệu.", "error");
+  } finally {
+    setLoading("load", false, "Tải cấu hình");
+    setTimeout(() => { isSyncingData = false; }, 200);
+  }
+};
+
+// SỰ KIỆN: POST SAVE
+document.getElementById("save").onclick = async () => {
+  const apiUrl = document.getElementById("api").value;
+  const token = document.getElementById("token").value;
+  showStatus("status", "", "");
+  
+  if (!token.trim()) {
+    showStatus("save_status", "Thiếu Admin Token!", "error");
+    document.getElementById("token").focus();
+    return;
+  }
+  
+  showStatus("save_status", "Đang đẩy dữ liệu...", "info");
+  setLoading("save", true, "Lưu cấu hình");
+  
+  const bannerArray = bannerIndices.map(num => {
+    return {
+      href: document.getElementById(`b${num}_href`).value.trim() || "#",
+      img: document.getElementById(`b${num}_img`).value.trim() || ""
+    };
+  });
+  
+  const body = {
+    live_enabled: document.getElementById("live_enabled").checked,
+    show_live_on_home: document.getElementById("show_live_on_home").checked,
+    live_url: document.getElementById("live_url").value.trim(),
+    banners: bannerArray
+  };
+  
+  try {
+    const r = await fetch(apiUrl, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json", 
+        "Authorization": "Bearer " + token.trim(), 
+        "Accept": "application/json" 
+      },
+      body: JSON.stringify(body)
+    });
+    
+    if (r.ok) {
+      showStatus("save_status", "Hệ thống đã tự động cập nhật!", "success");
+    } else if (r.status === 401) {
+      showStatus("save_status", "Token sai hoặc hết hạn!", "error");
+    } else {
+      showStatus("save_status", `Lỗi hệ thống: ${r.status}`, "error");
+    }
+  } catch (e) {
+    showStatus("save_status", "Sự cố đường truyền dữ liệu.", "error");
+  } finally {
+    setLoading("save", false, "Lưu cấu hình");
+  }
+};
+</script>
+</body>
+</html>
